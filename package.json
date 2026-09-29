@@ -1,0 +1,24 @@
+{
+  "name": "help-desk-system",
+  "version": "1.0.0",
+  "description": "Sistema de helpDesk para usuário",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "compression": "1.8.2",
+    "cors": "2.8.6",
+    "dotenv": "18.0.4",
+    "express": "5.2.1",
+    "helmet": "8.3.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}
