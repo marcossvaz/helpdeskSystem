@@ -13,6 +13,7 @@ declare namespace NodeJs {
         JWT_EXPIRES_IN: string;
         JWT_REFRESH_SECRET: string;
         JWT_REFRESH_EXPIRES_IN: string;
-        MAX_FILE_SIZE_MB: number
+        MAX_FILE_SIZE_MB: number;
+        FRONTEND_URL: string
     }
 }
