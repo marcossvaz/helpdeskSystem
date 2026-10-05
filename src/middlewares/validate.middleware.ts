@@ -1,7 +1,7 @@
 import type { NextFunction, Request, RequestHandler, Response } from "express";
 import type { ZodType } from "zod";
+import type { Source } from "../types/global.js";
 
-type Source = "body" | "query" | "params";
 
 export const validate = (schema: ZodType, source: Source = "body"): RequestHandler => {
     return (req: Request, res: Response, next: NextFunction) => {
