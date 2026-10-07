@@ -1,5 +1,4 @@
 import http from 'http';
-
 import { app } from './app.js';
 import { initSocketIO } from './config/socket.js';
 import { setupSockettHandlers } from './realtime/socket.server.js';
@@ -9,6 +8,8 @@ import { logger } from './config/logger.js';
 async function startServer() {
 
     const httpServer = http.createServer(app);
+    
+    //Socket IO
     const io = initSocketIO(httpServer);
     setupSockettHandlers(io);
 
@@ -18,16 +19,23 @@ async function startServer() {
         logger.info(`Socket.IO server: http://localhost:${env.PORT}`);
         logger.info(`Environment: ${env.NODE_ENV}`);
     });
-
+    
+    // shutdown
     const shutdown = async (signal: string) => {
         logger.info(`${signal} received, shutting down`);
-        io.close();
+        io.close(() => {
+            logger.info("Server closed");
+            process.exit(0);
+        });
+
+        setTimeout(() => process.exit(1), 10_000).unref();
     };
 
     process.on('SIGTERM', () => shutdown('SIGTERM'));
     process.on('SIGINT', () => shutdown('SIGINT'));
 }
 
+// call of back with catch
 startServer().catch((err) => {
     logger.fatal({ err }, 'Failed to start server');
     process.exit(1);

@@ -9,13 +9,13 @@ import { errorMiddleware } from './middlewares/error.middleware.js';
 import { notFoundMiddleware } from './middlewares/notFound.middleware.js';
 import { env } from './config/env.js';
 import swaggerSpec from './config/swagger.js';
+import routesAll from './routes/index.js';
 
 //Alias express
 export const app = express();
 
-
 app.use(cors({ origin: env.FRONTEND_URL, credentials: true }));
-app.use(helmet)
+app.use(helmet())
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,7 +24,7 @@ app.use('/uploads', express.static("uploads"));
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-//app.use("api/healh",routes); //todo passar a rota
+app.use("/api/health", routesAll); 
 
 
 //middlewares

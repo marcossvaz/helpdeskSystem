@@ -5,9 +5,204 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+// ============ ENUMS ============
+
+enum Role {
+  CUSTOMER
+  AGENT
+  TEAM_LEAD
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum AgentStatus {
+  AVAILABLE
+  BUSY
+  OFFLINE
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TicketStatus {
+  OPEN
+  ASSIGNED
+  IN_PROGRESS
+  RESOLVED
+  REOPENED
+  CLOSED
+}
+
+enum MessageType {
+  CUSTOMER_MESSAGE
+  AGENT_MESSAGE
+  INTERNAL_NOTE
+  SYSTEM_MESSAGE
+}
+
+enum DeliveryStatus {
+  SENT
+  DELIVERED
+  SEEN
+}
+
+enum NotificationType {
+  TICKET_CREATED
+  TICKET_ASSIGNED
+  NEW_MESSAGE
+  STATUS_UPDATED
+  SLA_WARNING
+  SLA_BREACHED
+}
+
+// ============ MODELS ============
+
+model User {
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  password    String
+  role        Role         @default(CUSTOMER)
+  status      UserStatus   @default(ACTIVE)
+  agentStatus AgentStatus? // só para AGENT/TEAM_LEAD
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  createdTickets  Ticket[]           @relation("CustomerTickets")
+  assignedTickets Ticket[]           @relation("AgentTickets")
+  messages        TicketMessage[]
+  attachments     TicketAttachment[]
+  notifications   Notification[]
+  ratings         TicketRating[]
+  auditLogs       AuditLog[]
+
+}
+
+model TicketCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tickets Ticket[]
+}
+
+model Ticket {
+  id          String         @id @default(uuid())
+  number      Int            @unique @default(autoincrement()) // nº amigável (#1042)
+  title       String
+  description String
+  priority    TicketPriority @default(MEDIUM)
+  status      TicketStatus   @default(OPEN)
+
+  customerId       String
+  AssisgnedAgentId String?
+  categoryId       String
+
+  firstResponseAt DateTime?
+  resolvedAt      DateTime?
+  closedAt        DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  slaReponseDueAt DateTime?
+  resolverAt      DateTime?
+  slaResolveDueAt DateTime?
+  isEscaleted     Boolean   @default(false)
+
+  customer User           @relation("CustomerTickets", fields: [customerId], references: [id])
+  agent    User?          @relation("AgentTickets", fields: [AssisgnedAgentId], references: [id], onDelete: SetNull)
+  category TicketCategory @relation(fields: [categoryId], references: [id])
+
+  messages      TicketMessage[]
+  attachments   TicketAttachment[]
+  notifications Notification[]
+  rating        TicketRating?
+
+}
+
+model TicketMessage {
+  id             String         @id @default(uuid())
+  ticketId       String
+  authorId       String? // null = mensagem do sistema
+  type           MessageType
+  content        String
+  deliveryStatus DeliveryStatus @default(SENT)
+  createdAt      DateTime       @default(now())
+
+  ticket      Ticket             @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  author      User?              @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  attachments TicketAttachment[]
+
+}
+
+model TicketAttachment {
+  id         String   @id @default(uuid())
+  ticketId   String
+  messageId  String?
+  uploadedBy String
+  fileName   String
+  mimeType   String
+  size       Int
+  path       String
+  createdAt  DateTime @default(now())
+
+  ticket   Ticket         @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  message  TicketMessage? @relation(fields: [messageId], references: [id], onDelete: SetNull)
+  uploader User           @relation(fields: [uploadedBy], references: [id])
+
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  ticketId  String?
+  type      NotificationType
+  message   String
+  isRead    Boolean          @default(false)
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ticket Ticket? @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+}
+
+model TicketRating {
+  id        String   @id @default(uuid())
+  ticketId  String   @unique // 1 avaliação por ticket
+  userId    String
+  score     Int // validar 1–5 no Zod
+  comment   String?
+  createdAt DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String // ex.: "TICKET_ASSIGNED"
+  entity    String // ex.: "Ticket"
+  entityId  String
+  detailsMetadata  Json?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
