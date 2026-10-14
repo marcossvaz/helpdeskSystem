@@ -24,7 +24,7 @@ app.use('/uploads', express.static("uploads"));
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use("/api/health", routesAll); 
+app.use("/api/helpDesk", routesAll); 
 
 
 //middlewares

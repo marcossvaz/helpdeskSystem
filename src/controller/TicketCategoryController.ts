@@ -4,7 +4,7 @@ import { ticketCategoryServiceFactory } from '../factory/TicketCategoryServiceFa
 import { ZodError } from 'zod';
 import { AppError } from '../utils/AppError.js';
 
-export class TicketCategory {
+export class TicketCategoryController {
     create = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const value = ticketCategorySchema.parse(req.body);
