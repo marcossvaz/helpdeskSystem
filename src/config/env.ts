@@ -18,6 +18,7 @@ export interface EnvConfig {
     JWT_REFRESH_EXPIRES_IN: string;
     MAX_FILE_SIZE_MB: number;
     FRONTEND_URL: string;
+    SALT_ROUND: number;
 }
 
 export const env: EnvConfig = {
@@ -35,6 +36,7 @@ export const env: EnvConfig = {
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || '43434',
     JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
     MAX_FILE_SIZE_MB: Number(process.env.MAX_FILE_SIZE_MB) || 5,
-    FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:4200'
+    FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:4200',
+    SALT_ROUND: Number(process.env.SALT_ROUND) || 10,
 }
 

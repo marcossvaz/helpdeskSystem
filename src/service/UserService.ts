@@ -1,6 +1,7 @@
 import type { IUserCreateSchema } from "../controller/schemas/UserSchema.js";
 import type { UserRepository } from "../repository/UserRepository.js";
 import { AppError } from "../utils/AppError.js";
+import { generateHash } from "../utils/hash.js";
 
 export class UserService {
 
@@ -12,7 +13,11 @@ export class UserService {
 
         if(existingUser) throw new AppError("Já existe email com esse usuário", 409);
 
-        const result = this._userRepository.create(data);
+        const hashPassword = await generateHash(data.password);
+
+        const userCreate = {...data, password: hashPassword};
+
+        const result = this._userRepository.create(userCreate);
         return result;
     }
 
