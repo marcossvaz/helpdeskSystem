@@ -1,15 +1,15 @@
 import type {Request, Response, NextFunction} from 'express';
-import { registerSchema } from './schemas/authSchema.js';
+import { loginSchema } from './schemas/authSchema.js';
 import { authServiceFactory } from '../factory/authServiceFactory.js';
 import { ZodError } from 'zod';
 import { AppError } from '../utils/AppError.js';
 
 export class AuthController {
-    register = async (req: Request, res: Response, next: NextFunction) => {
+    login = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const value = registerSchema.parse(req.body);
+            const value = loginSchema.parse(req.body);
 
-            const result = await authServiceFactory.register(value);
+            const result = await authServiceFactory.login(value);
             return res.status(201).json(result);
         } catch(err) {
             if(err instanceof ZodError) {

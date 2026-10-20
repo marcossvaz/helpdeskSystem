@@ -1,4 +1,4 @@
 import { AuthService } from "../service/authService.js";
-import { authRepositoryFactory } from "./authRepositoryFactory.js";
+import { userRepositoryFactory } from "./UserRepositoryFactory.js";
 
-export const authServiceFactory = new AuthService(authRepositoryFactory);
+export const authServiceFactory = new AuthService(userRepositoryFactory);

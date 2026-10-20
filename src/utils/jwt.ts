@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { type SignOptions } from 'jsonwebtoken';
 import { env } from '../config/env.js';
 
 
@@ -10,7 +10,7 @@ interface TokenPayLoad {
 
 export const generateToken = (payload: TokenPayLoad): string => {
     return jwt.sign(payload, env.JWT_SECRET, {
-        expiresIn: env.JWT_REFRESH_EXPIRES_IN as string
+        expiresIn: env.JWT_REFRESH_EXPIRES_IN as SignOptions['expiresIn']
     });
 }
 
