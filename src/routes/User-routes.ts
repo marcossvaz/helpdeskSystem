@@ -106,4 +106,51 @@ export const userRoutes = new UserController();
 userRoute.post('/user', userRoutes.create);
 
 
+/**
+ * @swagger
+ * /api/helpDesk/user/{id}:
+ *   get:
+ *     summary: Busca um usuário pelo ID
+ *     description: Retorna os dados de um usuário específico cadastrado no sistema.
+ *     tags:
+ *       - Usuários
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           minLength: 2
+ *         description: ID único do usuário
+ *         example: "clx123abc456def789"
+ *     responses:
+ *       200:
+ *         description: Usuário encontrado com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserResponse'
+ *       400:
+ *         description: Erro na validação do ID (ZodError).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Algo de errado com entrada de dados"
+ *               statusCode: 400
+ *       404:
+ *         description: Usuário não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "Algo de errado com usuário"
+ *               statusCode: 404
+ *       401:
+ *         description: Não autorizado (Token ausente ou inválido).
+ */
 userRoute.get('/user/:id', userRoutes.findById);
