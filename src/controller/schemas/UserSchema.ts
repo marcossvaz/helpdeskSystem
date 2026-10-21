@@ -6,9 +6,12 @@ export const userCreateSchema = z.object({
     password: z.string().min(2, "Senha é obrigatório")
 })
 
-
+export const userIdSchema = z.object({
+    id: z.string().min(2, "O id é obrigatório")
+})
 
 
 
 // _________TYPES ________:
 export type IUserCreateSchema = z.infer<typeof userCreateSchema>;
+export type IUserIdSchema = z.infer<typeof userIdSchema>

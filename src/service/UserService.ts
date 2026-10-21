@@ -26,6 +26,10 @@ export class UserService {
     }
 
     async findById (id: string) {
+        const findUser = await this._userRepository.findById(id);
+
+        if(!findUser) throw new AppError("Algo de errado com usuário", 404);
+
         return await this._userRepository.findById(id);
     }
 }
