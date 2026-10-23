@@ -4,8 +4,8 @@ export async function createAuditLog(params: {
     userId?: string;
     action: string;
     entity: string;
-    entityId: string ;
-    detailsMetadata?: Record<string,any>;
+    entityId: string;
+    detailsMetadata?: Record<string, any>;
 }) {
     return prisma.auditLog.create({
         data: {

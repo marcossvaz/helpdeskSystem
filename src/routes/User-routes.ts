@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { UserController } from "../controller/UserController.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { roleMiddleware } from "../middlewares/role.middleware.js";
 
 
 export const userRoute = Router()
@@ -64,13 +66,16 @@ export const userRoutes = new UserController();
 
 /**
 /**
+/**
  * @swagger
  * /api/helpDesk/user:
  *   post:
- *     summary: Cria um novo usuário
- *     description: Endpoint para cadastro de usuários no sistema de help-desk.
+ *     summary: Cria um novo usuário (Apenas Admin)
+ *     description: Endpoint restrito para administradores cadastrarem novos usuários no sistema de help-desk.
  *     tags:
  *       - Usuários
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -93,6 +98,10 @@ export const userRoutes = new UserController();
  *             example:
  *               message: "Algo de errado com entrada de dados"
  *               statusCode: 400
+ *       401:
+ *         description: Não autorizado - Token ausente, inválido ou expirado.
+ *       403:
+ *         description: Acesso negado - O usuário autenticado não possui o perfil ADMIN necessário.
  *       409:
  *         description: Conflito - E-mail já cadastrado no sistema.
  *         content:
@@ -103,7 +112,7 @@ export const userRoutes = new UserController();
  *               message: "Já existe email com esse usuário"
  *               statusCode: 409
  */
-userRoute.post('/user', userRoutes.create);
+userRoute.post('/user', authMiddleware, roleMiddleware('ADMIN', 'TEAM_LEAD'), userRoutes.create);
 
 
 /**

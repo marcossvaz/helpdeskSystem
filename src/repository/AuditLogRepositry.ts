@@ -3,7 +3,6 @@ import type { AuditLog } from "../model/AuditLog.js";
 
 export class AuditLogRepositry {
 
-    // todo testar a rota antes de fazer o commit
     
     async create(data: AuditLog) {
         return await prisma.auditLog.create({
