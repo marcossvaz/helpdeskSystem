@@ -5,4 +5,4 @@ export const ticketRoute = new TicketController();
 export const ticketRoutes = Router();
 
 
-ticketRoutes.post('/ticket', ticketRoute.create);
+ticketRoutes.post('/ticket/:id', ticketRoute.create);

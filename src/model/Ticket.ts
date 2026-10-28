@@ -1,8 +1,7 @@
 import type { TicketPriority, TicketStatus } from "../generated/prisma/enums.js";
 
-
 export interface Ticket {
-
+    ticketNumber: string;
     title: string;
     description: string;
     priority: TicketPriority | undefined;
@@ -10,5 +9,7 @@ export interface Ticket {
     customerId: string ;
     AssisgnedAgentId?: string | undefined;
     categoryId: string ;
-
+    slaReponseDueAt: Date;
+    slaResolveDueAt: Date;
+    
 }

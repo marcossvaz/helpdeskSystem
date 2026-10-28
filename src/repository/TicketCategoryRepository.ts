@@ -11,4 +11,10 @@ export class TicketCategoryRepository {
             }
         })
     }
+
+    async findById(id: string) {
+        return await prisma.ticketCategory.findUnique({
+            where: {id}
+        })
+    }
 }

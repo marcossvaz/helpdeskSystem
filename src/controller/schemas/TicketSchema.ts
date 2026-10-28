@@ -13,6 +13,19 @@ export const createTicketSchema = z.object({
     categoryId: z.string().min(2, "Id da categoria deve ser colocado")
 })
 
+export const customerId = z.object({
+    id: z.string().min(2, "id do cliente")
+})
+
+
+export const updateTicketStatusSchema = z.object({
+    status: z.enum(['IN_PROGRESS', 'RESOLVED']),
+});
+
+export const ticketRatingSchema = z.object({
+    rating: z.number().int().max(5),
+    feedback: z.string().optional(),
+})
 
 
 //______ TYPES _________:

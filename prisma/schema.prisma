@@ -90,7 +90,6 @@ model User {
   notifications   Notification[]
   ratings         TicketRating[]
   auditLogs       AuditLog[]
-
 }
 
 model TicketCategory {
@@ -104,27 +103,26 @@ model TicketCategory {
 }
 
 model Ticket {
-  id          String         @id @default(uuid())
-  number      Int            @unique @default(autoincrement()) // nº amigável (#1042)
-  title       String
-  description String
-  priority    TicketPriority @default(MEDIUM)
-  status      TicketStatus   @default(OPEN)
-
+  id               String  @id @default(uuid())
+  ticketnumber     String?  @unique 
+  title            String
+  description      String
   customerId       String
   AssisgnedAgentId String?
   categoryId       String
 
+  priority TicketPriority @default(MEDIUM)
+  status   TicketStatus   @default(OPEN)
+
   firstResponseAt DateTime?
   resolvedAt      DateTime?
-  closedAt        DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-
-  slaReponseDueAt DateTime?
-  resolverAt      DateTime?
   slaResolveDueAt DateTime?
-  isEscaleted     Boolean   @default(false)
+  closedAt        DateTime?
+  slaReponseDueAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isEscaleted Boolean @default(false)
 
   customer User           @relation("CustomerTickets", fields: [customerId], references: [id])
   agent    User?          @relation("AgentTickets", fields: [AssisgnedAgentId], references: [id], onDelete: SetNull)
@@ -134,7 +132,6 @@ model Ticket {
   attachments   TicketAttachment[]
   notifications Notification[]
   rating        TicketRating?
-
 }
 
 model TicketMessage {
@@ -149,7 +146,6 @@ model TicketMessage {
   ticket      Ticket             @relation(fields: [ticketId], references: [id], onDelete: Cascade)
   author      User?              @relation(fields: [authorId], references: [id], onDelete: SetNull)
   attachments TicketAttachment[]
-
 }
 
 model TicketAttachment {
@@ -166,7 +162,6 @@ model TicketAttachment {
   ticket   Ticket         @relation(fields: [ticketId], references: [id], onDelete: Cascade)
   message  TicketMessage? @relation(fields: [messageId], references: [id], onDelete: SetNull)
   uploader User           @relation(fields: [uploadedBy], references: [id])
-
 }
 
 model Notification {
@@ -196,13 +191,13 @@ model TicketRating {
 }
 
 model AuditLog {
-  id        String   @id @default(uuid())
-  userId    String?
-  action    String // ex.: "TICKET_ASSIGNED"
-  entity    String // ex.: "Ticket"
-  entityId  String
-  detailsMetadata  Json?
-  createdAt DateTime @default(now())
+  id              String   @id @default(uuid())
+  userId          String?
+  action          String // ex.: "TICKET_ASSIGNED"
+  entity          String // ex.: "Ticket"
+  entityId        String
+  detailsMetadata Json?
+  createdAt       DateTime @default(now())
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 }

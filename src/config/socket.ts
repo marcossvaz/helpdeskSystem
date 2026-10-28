@@ -10,7 +10,7 @@ import { logger } from "./logger.js";
 let io: Server;
 
 export function initSocketIO(httpServer: HttpServer): Server {
-    io = new Server (httpServer, {
+    io = new Server(httpServer, {
         cors: {
             origin: env.FRONTEND_URL,
             methods: ['GET', 'POST'],
@@ -34,7 +34,7 @@ export function initSocketIO(httpServer: HttpServer): Server {
 }
 
 export function getIo(): Server {
-    if(!io) {
+    if (!io) {
         throw new Error(`Socket.IO not initialized`);
     }
 

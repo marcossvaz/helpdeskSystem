@@ -8,4 +8,8 @@ export class TicketCategoryService {
     async create(data: ITicketCategorySchema) {
         return await this._tickerCategoryRepository.create(data);
     }
+
+    async findById(id: string) {
+        return await this._tickerCategoryRepository.findById(id)
+    }
 }
