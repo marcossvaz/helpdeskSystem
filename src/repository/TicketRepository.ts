@@ -1,4 +1,5 @@
 import type { TicketPriority } from "../generated/prisma/enums.js";
+import type { TicketUpdateInput } from "../generated/prisma/models.js";
 import { prisma } from "../lib/prisma.js";
 import type { Ticket } from "../model/Ticket.js";
 
@@ -27,6 +28,13 @@ export class TicketRepository {
             where: {
                 id: id
             }
+        })
+    }
+
+    async updateStatus(ticketnumber: string, data:TicketUpdateInput, userId:string) {
+        return await prisma.ticket.update({
+            where: {ticketnumber},
+            data
         })
     }
 

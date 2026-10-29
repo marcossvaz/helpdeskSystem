@@ -7,3 +7,4 @@ export const ticketRoutes = Router();
 
 ticketRoutes.post('/ticket/:id', ticketRoute.create);
 ticketRoutes.get('/ticket/findTicketByNumber/:ticketnumber', ticketRoute.findTicketByNumber);
+ticketRoutes.patch('/tickets/number/:ticketnumber', ticketRoute.updateStatus);

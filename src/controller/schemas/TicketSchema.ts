@@ -19,7 +19,7 @@ export const customerId = z.object({
 
 
 export const updateTicketStatusSchema = z.object({
-    status: z.enum(['IN_PROGRESS', 'RESOLVED']),
+    status: z.enum(['IN_PROGRESS', 'RESOLVED', 'OPEN', 'ASSIGNED', 'REOPENED', 'CLOSED']),
 });
 
 export const ticketRatingSchema = z.object({
@@ -30,15 +30,15 @@ export const ticketRatingSchema = z.object({
 
 export const tickerSchema = z.object({
     ticketnumber: z.string().min(2, "o número de ticket"),
-    userId: z.string().min(2, "coloque o id do usuário que abriu a requisição")
 })
 
 
 export const ticketNumberSchema = z.object({
     ticketnumber: z.string().min(2, "o número de ticket"),
-
 })
 
 
 //______ TYPES _________:
 export type ICreateTicketSchema = z.infer<typeof createTicketSchema>;
+export type IUpdateTicketStatusSchema = z.infer<typeof updateTicketStatusSchema>;
+export type ITickerSchema = z.infer<typeof tickerSchema>;

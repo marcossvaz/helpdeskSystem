@@ -21,11 +21,27 @@ export class TicketController {
         }
     }
 
-  
+    updateStatus = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { ticketnumber } = tickerSchema.parse(req.params);
+            const data = updateTicketStatusSchema.parse(req.body);
+
+            const result = await ticketServiceFactory.updateStatus(data, { ticketnumber }, req.user?.id as string);
+            return res.status(201).json(result);
+        } catch (err) {
+            if (err instanceof ZodError) {
+                return next(new AppError("Algo de errado com entrada de dados", 401));
+            }
+
+            return next(err);
+        }
+    }
+
+
 
     findTicketByNumber = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { ticketnumber } =  ticketNumberSchema.parse(req.params);
+            const { ticketnumber } = ticketNumberSchema.parse(req.params);
 
             const result = await ticketServiceFactory.findTicketByNumber(ticketnumber);
             return res.status(201).json(result);
