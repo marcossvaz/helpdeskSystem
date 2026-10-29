@@ -60,4 +60,8 @@ export class TicketService {
     async findById(id: string) {
         return await this._ticketRepository.findById(id);
     }
+
+    async findTicketByNumber(ticketnumber: string) {
+        return await this._ticketRepository.findTicketByNumber(ticketnumber)
+    }
 }

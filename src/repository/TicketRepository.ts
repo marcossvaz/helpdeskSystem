@@ -7,7 +7,7 @@ export class TicketRepository {
     async create(data: Ticket) {
         return await prisma.ticket.create({
             data: {
-                
+
                 title: data.title,
                 description: data.description,
                 priority: data.priority as TicketPriority,
@@ -26,6 +26,14 @@ export class TicketRepository {
         return await prisma.ticket.findUnique({
             where: {
                 id: id
+            }
+        })
+    }
+
+    async findTicketByNumber(ticketnumber: string) {
+        return await prisma.ticket.findUnique({
+            where: {
+                ticketnumber
             }
         })
     }

@@ -28,5 +28,17 @@ export const ticketRatingSchema = z.object({
 })
 
 
+export const tickerSchema = z.object({
+    ticketnumber: z.string().min(2, "o número de ticket"),
+    userId: z.string().min(2, "coloque o id do usuário que abriu a requisição")
+})
+
+
+export const ticketNumberSchema = z.object({
+    ticketnumber: z.string().min(2, "o número de ticket"),
+
+})
+
+
 //______ TYPES _________:
 export type ICreateTicketSchema = z.infer<typeof createTicketSchema>;
