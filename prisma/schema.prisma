@@ -104,7 +104,7 @@ model TicketCategory {
 
 model Ticket {
   id               String  @id @default(uuid())
-  ticketnumber     String?  @unique 
+  ticketnumber     String? @unique
   title            String
   description      String
   customerId       String
@@ -120,9 +120,9 @@ model Ticket {
   closedAt        DateTime?
   slaReponseDueAt DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  isEscaleted Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isEscaleted Boolean  @default(false)
 
   customer User           @relation("CustomerTickets", fields: [customerId], references: [id])
   agent    User?          @relation("AgentTickets", fields: [AssisgnedAgentId], references: [id], onDelete: SetNull)
@@ -130,7 +130,6 @@ model Ticket {
 
   messages      TicketMessage[]
   attachments   TicketAttachment[]
-  notifications Notification[]
   rating        TicketRating?
 }
 
@@ -167,15 +166,15 @@ model TicketAttachment {
 model Notification {
   id        String           @id @default(uuid())
   userId    String
-  ticketId  String?
+  title     String
   type      NotificationType
   message   String
   isRead    Boolean          @default(false)
   readAt    DateTime?
+  metadata  Json?
   createdAt DateTime         @default(now())
 
   user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  ticket Ticket? @relation(fields: [ticketId], references: [id], onDelete: Cascade)
 }
 
 model TicketRating {

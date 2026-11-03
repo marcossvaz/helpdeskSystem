@@ -8,12 +8,15 @@ import { calculatesSLADates } from "../utils/sla.js";
 import { generateTickerNumber } from "../utils/ticketNumber.js";
 import type { TicketCategoryRepository } from "../repository/TicketCategoryRepository.js";
 import { getIo } from "../config/socket.js";
+import type { NotificationRepository } from "../repository/NotificationRepository.js";
+import type { notificationType } from "../model/Notification.js";
 
 export class TicketService {
 
     constructor(
         private readonly _ticketRepository: TicketRepository,
-        private readonly _ticketCategoryRepository: TicketCategoryRepository
+        private readonly _ticketCategoryRepository: TicketCategoryRepository,
+        private readonly _notificationRepository: NotificationRepository 
     ) { }
 
     async create(data: ICreateTicketSchema, customerId: string) {
@@ -75,6 +78,22 @@ export class TicketService {
             updateData,
             userId
         )
+
+        await createAuditLog({
+            userId,
+            action: "STATUS_CHANGED",
+            entity: "TICKET",
+            entityId: ticket.id,
+            detailsMetadata: {entity: ticket.id, status: data.status}
+        });
+
+        await this._notificationRepository.create({
+            userId: ticket.customerId,
+            title: "Ticket status updated",
+            message: `Ticker ${ticket.ticketnumber} status changed ${data.status}`,
+            type: data.typeNotification as notificationType,
+            metadata: {ticket, status: data.status}
+        })
 
         return updated;
     }

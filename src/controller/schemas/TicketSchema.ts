@@ -20,6 +20,7 @@ export const customerId = z.object({
 
 export const updateTicketStatusSchema = z.object({
     status: z.enum(['IN_PROGRESS', 'RESOLVED', 'OPEN', 'ASSIGNED', 'REOPENED', 'CLOSED']),
+    typeNotification: z.enum(['TICKET_CREATED', 'TICKET_ASSIGNED', 'NEW_MESSAGE', 'STATUS_UPDATED', 'SLA_WARNING', 'SLA_BREACHED'])
 });
 
 export const ticketRatingSchema = z.object({
