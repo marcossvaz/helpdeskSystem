@@ -10,13 +10,14 @@ import type { TicketCategoryRepository } from "../repository/TicketCategoryRepos
 import { getIo } from "../config/socket.js";
 import type { NotificationRepository } from "../repository/NotificationRepository.js";
 import type { notificationType } from "../model/Notification.js";
+import { logger } from "../config/logger.js";
 
 export class TicketService {
 
     constructor(
         private readonly _ticketRepository: TicketRepository,
         private readonly _ticketCategoryRepository: TicketCategoryRepository,
-        private readonly _notificationRepository: NotificationRepository 
+        private readonly _notificationRepository: NotificationRepository
     ) { }
 
     async create(data: ICreateTicketSchema, customerId: string) {
@@ -53,7 +54,9 @@ export class TicketService {
                     title: data.title,
                     priority: data.priority
                 })
-            } catch (_) {/* SOCKET NOT INITIALIZED YET*/ }
+            } catch (error) {
+                logger.warn({error}, "Falha ao emitir evento de socket")
+            }
         }
 
         return ticket;
@@ -84,7 +87,7 @@ export class TicketService {
             action: "STATUS_CHANGED",
             entity: "TICKET",
             entityId: ticket.id,
-            detailsMetadata: {entity: ticket.id, status: data.status}
+            detailsMetadata: { entity: ticket.id, status: data.status }
         });
 
         await this._notificationRepository.create({
@@ -92,8 +95,22 @@ export class TicketService {
             title: "Ticket status updated",
             message: `Ticker ${ticket.ticketnumber} status changed ${data.status}`,
             type: data.typeNotification as notificationType,
-            metadata: {ticket, status: data.status}
+            metadata: { ticket, status: data.status }
         })
+
+        try {
+            const io = getIo();
+            io.to(`ticket:${ticket.id}`).emit("ticket_status_changed", {
+                ticket: ticket.id,
+                status: data.status,
+            });
+            io.to(`user:${ticket.customerId}`).emit(`notification_received`, {
+                title: ticket.title,
+                message: `ticket ${ticket.ticketnumber} status chenged ${data.status}`
+            })
+        } catch (error) {
+            logger.warn({error}, "Falha ao emitir evento de socket");
+        }
 
         return updated;
     }
