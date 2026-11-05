@@ -124,6 +124,25 @@ const options: swaggerJsdoc.Options = {
                             description: 'Id da categoria do ticket'
                         }
                     }
+                }, PaginatedTicketResponse: {
+                    type: 'object',
+                    properties: {
+                        data: {
+                            type: 'array',
+                            items: {
+                                $ref: '#/components/schemas/TicketResponse'
+                            }
+                        },
+                        meta: {
+                            type: 'object',
+                            properties: {
+                                page: { type: 'number', example: 1 },
+                                limit: { type: 'number', example: 10 },
+                                total: { type: 'number', example: 45 },
+                                totalPage: { type: 'number', example: 5 }
+                            }
+                        }
+                    }
                 },
                 TicketResponse: {
                     type: 'object',
