@@ -33,6 +33,10 @@ export const tickerSchema = z.object({
     ticketnumber: z.string().min(2, "o número de ticket"),
 })
 
+export const paginationSchema = z.object({
+    page: z.coerce.number().int().positive().default(1),
+    limit: z.coerce.number().int().positive().max(100).default(10),
+});
 
 export const ticketNumberSchema = z.object({
     ticketnumber: z.string().min(2, "o número de ticket"),
@@ -43,3 +47,4 @@ export const ticketNumberSchema = z.object({
 export type ICreateTicketSchema = z.infer<typeof createTicketSchema>;
 export type IUpdateTicketStatusSchema = z.infer<typeof updateTicketStatusSchema>;
 export type ITickerSchema = z.infer<typeof tickerSchema>;
+export type IPaginationSchema = z.infer<typeof paginationSchema>;

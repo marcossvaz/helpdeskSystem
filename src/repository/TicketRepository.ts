@@ -31,9 +31,21 @@ export class TicketRepository {
         })
     }
 
-    async updateStatus(ticketnumber: string, data:TicketUpdateInput, userId:string) {
+    async getAllTicket(skip: number, limit: number) {
+        const [data, total] = await prisma.$transaction([
+            prisma.ticket.findMany({ skip, take: limit, orderBy: { createdAt: 'desc' } }),
+            prisma.ticket.count(),
+        ])
+
+        return {
+            data,
+            total
+        }
+    }
+
+    async updateStatus(ticketnumber: string, data: TicketUpdateInput, userId: string) {
         return await prisma.ticket.update({
-            where: {ticketnumber},
+            where: { ticketnumber },
             data
         })
     }

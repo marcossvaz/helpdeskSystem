@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import { createTicketSchema, customerId, tickerSchema, ticketNumberSchema, updateTicketStatusSchema } from './schemas/TicketSchema.js';
+import { createTicketSchema, customerId, paginationSchema, tickerSchema, ticketNumberSchema, updateTicketStatusSchema } from './schemas/TicketSchema.js';
 import { ticketServiceFactory } from '../factory/TicketServiceFactory.js';
 import { ZodError } from 'zod';
 import { AppError } from '../utils/AppError.js';
@@ -37,6 +37,19 @@ export class TicketController {
         }
     }
 
+    getAllTicket = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const pagination = paginationSchema.parse(req.query);
+            const result = await ticketServiceFactory.getAllTicket(pagination)
+
+            return res.status(200).json(result);
+        } catch (err) {
+            if (err instanceof ZodError) {
+                return next(new AppError('Algo de errado com entrada de dados', 400));
+            }
+            return next(err);
+        }
+    }
 
 
     findTicketByNumber = async (req: Request, res: Response, next: NextFunction) => {

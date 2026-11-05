@@ -1,7 +1,7 @@
 import type { TicketPriority } from "../generated/prisma/enums.js";
 
 import type { TicketRepository } from "../repository/TicketRepository.js";
-import type { ICreateTicketSchema, ITickerSchema, IUpdateTicketStatusSchema } from "../controller/schemas/TicketSchema.js";
+import type { ICreateTicketSchema, IPaginationSchema, ITickerSchema, IUpdateTicketStatusSchema } from "../controller/schemas/TicketSchema.js";
 import { AppError } from "../utils/AppError.js";
 import { createAuditLog } from "../utils/audit.js";
 import { calculatesSLADates } from "../utils/sla.js";
@@ -60,6 +60,18 @@ export class TicketService {
         }
 
         return ticket;
+    }
+
+    async getAllTicket({page, limit}: IPaginationSchema) {
+        const skip = (page - 1) * limit;
+        const {data, total} = await this._ticketRepository.getAllTicket(skip, limit);
+
+
+        return {
+            data,
+            meta: {page, limit, total, totalPage: Math.ceil(total / limit)}
+        }
+
     }
 
     async updateStatus(data: IUpdateTicketStatusSchema, ticketInput: ITickerSchema, userId: string) {
