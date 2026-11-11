@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { createTicketSchema, customerId, paginationSchema, tickerSchema, ticketNumberSchema, updateTicketStatusSchema } from './schemas/TicketSchema.js';
-import { ticketServiceFactory } from '../factory/TicketServiceFactory.js';
+import { ticketServiceFactory } from '../container/TicketServiceFactory.js';
 import { ZodError } from 'zod';
 import { AppError } from '../utils/AppError.js';
 

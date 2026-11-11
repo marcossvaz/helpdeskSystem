@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/AppError.js';
 import { verifyToken } from '../utils/jwt.js';
-import { userRepositoryFactory } from '../factory/UserRepositoryFactory.js';
+import { userRepositoryFactory } from '../container/UserRepositoryFactory.js';
 
 
 export const authMiddleware = async (req: Request, _res: Response, next: NextFunction) => {

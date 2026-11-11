@@ -8,8 +8,9 @@ export class UserRepository{
                 name: data.name,
                 email: data.email,
                 password: data.password,
-                role: data.role
-            }
+                role: data.role,
+            },
+            include: {assignedTickets: true, }
         })
     }
 
@@ -25,7 +26,7 @@ export class UserRepository{
         return await prisma.user.findUnique({
             where: {
                 id
-            }
+            }, include: {assignedTickets: true}
         })
     }
 }

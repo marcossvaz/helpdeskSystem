@@ -1,7 +1,7 @@
 import http from 'http';
 import { app } from './app.js';
 import { initSocketIO } from './config/socket.js';
-import { setupSockettHandlers } from './realtime/socket.server.js';
+import { setupSocketHandlers } from './realtime/socket.server.js';
 import { env } from './config/env.js';
 import { logger } from './config/logger.js';
 
@@ -9,9 +9,9 @@ async function startServer() {
 
     const httpServer = http.createServer(app);
     
-    //Socket IO
+    //Socket IO initialize
     const io = initSocketIO(httpServer);
-    setupSockettHandlers(io);
+    setupSocketHandlers(io);
 
     httpServer.listen(env.PORT, () => {
         logger.info(`Server is running on port ${env.PORT}`);

@@ -1,6 +1,6 @@
 import type {NextFunction, Request, Response} from 'express';
 import { createAuditLogSchema } from './schemas/AuditLogSchema.js';
-import { auditLogServiceFactory } from '../factory/auditLogServiceFactory.js';
+import { auditLogServiceFactory } from '../container/auditLogServiceFactory.js';
 import { AppError } from '../utils/AppError.js';
 import { ZodError } from 'zod';
 

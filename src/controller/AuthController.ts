@@ -1,6 +1,6 @@
 import type {Request, Response, NextFunction} from 'express';
 import { loginSchema } from './schemas/authSchema.js';
-import { authServiceFactory } from '../factory/authServiceFactory.js';
+import { authServiceFactory } from '../container/authServiceFactory.js';
 import { ZodError } from 'zod';
 import { AppError } from '../utils/AppError.js';
 

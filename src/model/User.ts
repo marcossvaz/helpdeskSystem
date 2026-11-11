@@ -1,8 +1,11 @@
-enum Role {
-    AGENT = "AGENT",
-    TEAM_LEAD = "TEAM_LEAD",
-    ADMIN = "ADMIN"
-}
+export const ROLE  = [
+    "AGENT",
+    "TEAM_LEAD",
+    "ADMIN",
+    "CUSTOMER"
+] as const
+
+type Role = (typeof ROLE[number])
 
 export interface User {
     name: string;

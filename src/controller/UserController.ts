@@ -1,6 +1,6 @@
 import type { NextFunction } from 'express';
 import { userCreateSchema, userIdSchema } from './schemas/UserSchema.js';
-import { userServiceFactory } from '../factory/UserServiceFactory.js';
+import { userServiceFactory } from '../container/UserServiceFactory.js';
 import { AppError } from '../utils/AppError.js';
 import type { Request, Response } from 'express';
 import { ZodError } from 'zod';
