@@ -1,11 +1,10 @@
-import { Socket } from "socket.io";
 import { verifyToken } from "../utils/jwt.js";
 import { AppError } from "../utils/AppError.js";
 import { logger } from "../config/logger.js";
 import type { UserService } from "../service/UserService.js";
-import type { SocketData } from "../types/socket.js";
+import type { AppSocket, SocketData } from "../types/socket.js";
 
-type AppSocket = Socket<any, any, any, SocketData>
+
 
 
 export const socketAuthMiddleware = (userService: UserService) => async (socket: AppSocket, next: (err?: Error) => void) => {

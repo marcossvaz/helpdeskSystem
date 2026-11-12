@@ -1,4 +1,4 @@
-import type { Socket } from "socket.io";
+import type { DefaultEventsMap, Server, Socket } from "socket.io";
 import type { AgentStatus, Role, UserStatus } from "../generated/prisma/enums.ts";
 
 export interface SocketUser {
@@ -10,6 +10,22 @@ export interface SocketUser {
     agentStatus?: AgentStatus | null;
 }
 
-export interface SocketData extends Socket{
+export interface SocketData {
     user: SocketUser;
 }
+
+// crie um tipo do socket já tipado com generic
+export type AppSocket = Socket <
+    DefaultEventsMap,
+    DefaultEventsMap,
+    DefaultEventsMap,
+    SocketData
+>;
+
+// cria um tipo de server já tipado com generic
+export type AppServer = Server<
+    DefaultEventsMap,
+    DefaultEventsMap,
+    DefaultEventsMap,
+    SocketData
+>

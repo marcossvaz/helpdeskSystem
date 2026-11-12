@@ -1,8 +1,8 @@
-import type { SocketData } from "../types/socket.js";
+import type { AppSocket} from "../types/socket.js";
 import type { TicketService } from "../service/TicketService.js";
 import { logger } from "../config/logger.js";
 
-export function registerTicketHandlers(socket: SocketData, ticketService: TicketService) {
+export function registerTicketHandlers(socket: AppSocket, ticketService: TicketService) {
   socket.on(
     "join_ticket_room",
     async (
@@ -19,7 +19,7 @@ export function registerTicketHandlers(socket: SocketData, ticketService: Ticket
           return acknowledge?.({ ok: false, error: "Ticket not found" });
         }
 
-        const { role, id: userId } = socket.user;
+        const { role, id: userId } = socket.data.user;
 
         if (role === "CUSTOMER" && ticket.customerId !== userId) {
           return acknowledge?.({ ok: false, error: "Acesso negado" });
@@ -53,7 +53,7 @@ export function registerTicketHandlers(socket: SocketData, ticketService: Ticket
     socket.leave(`${room}:staff`);
 
     logger.debug(
-      { userId: socket.user.id, ticketId: data.ticketId },
+      { userId: socket.data.user.id, ticketId: data.ticketId },
       "User left ticket room",
     );
   });

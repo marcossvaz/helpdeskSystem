@@ -1,13 +1,14 @@
-import type { Server } from "socket.io";
 import { logger } from "../config/logger.js";
 import { socketAuthMiddleware } from "./socket.auth.js";
-import { userServiceFactory } from "../container/UserServiceFactory.js";
-import type { SocketData } from "../types/socket.js";
+import type { AppServer } from "../types/socket.js";
+import type { UserService } from "../service/UserService.js";
+import type { TicketService } from "../service/TicketService.js";
+import { registerTicketHandlers } from "./socket.socket.js";
 
-type AppServer = Server<any, any, any, SocketData>;
 
-export function setupSocketHandlers(io: AppServer) {
-    io.use(socketAuthMiddleware(userServiceFactory));
+
+export function setupSocketHandlers(io: AppServer, userService: UserService, ticketService: TicketService) {
+    io.use(socketAuthMiddleware(userService));
 
     io.on("connection", (socket) => {
         const { id: userId, name, role } = socket.data.user;
@@ -23,6 +24,9 @@ export function setupSocketHandlers(io: AppServer) {
             socket.join("staff");
             socket.to("staff").emit("user_online", { userId, name, role });
         }
+
+        registerTicketHandlers(socket, ticketService);
+
 
         socket.on("disconnect", (reason) => {
             logger.info({ userId, socketId: socket.id, reason }, "Socket disconnected");
