@@ -2,7 +2,7 @@ import { verifyToken } from "../utils/jwt.js";
 import { AppError } from "../utils/AppError.js";
 import { logger } from "../config/logger.js";
 import type { UserService } from "../service/UserService.js";
-import type { AppSocket, SocketData } from "../types/socket.js";
+import type { AppSocket} from "../types/socket.js";
 
 
 

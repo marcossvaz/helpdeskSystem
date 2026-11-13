@@ -5,13 +5,15 @@ import { setupSocketHandlers } from './realtime/socket.server.js';
 import { env } from './config/env.js';
 import { logger } from './config/logger.js';
 
-async function startServer() {
+import { userServiceFactory } from './container/UserServiceFactory.js';
+import { ticketServiceFactory } from './container/TicketServiceFactory.js';
 
+async function startServer() {
     const httpServer = http.createServer(app);
     
     //Socket IO initialize
     const io = initSocketIO(httpServer);
-    setupSocketHandlers(io);
+    setupSocketHandlers(io, userServiceFactory, ticketServiceFactory);
 
     httpServer.listen(env.PORT, () => {
         logger.info(`Server is running on port ${env.PORT}`);
