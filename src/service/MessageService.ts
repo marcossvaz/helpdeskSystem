@@ -1,4 +1,4 @@
-import type { Role } from "../generated/prisma/enums.js";
+import { MessageType, type Role } from "../generated/prisma/enums.js";
 import type { TicketMessageRepository } from "../repository/TicketMessageRepository.js";
 import type { TicketRepository } from "../repository/TicketRepository.js";
 import { AppError } from "../utils/AppError.js";
@@ -23,12 +23,8 @@ export class MessageService {
             throw new AppError('Acesso negado', 403);
         }
 
-        const where: any = {ticketId};
-        if(userRole === 'CUSTOMER') {
-            where.type = {not: "nota interna"};
-        }
-
-        return await this._ticketMessageRepositoryContainer.getAllTicketMessage(where);
+        const excludeTupes = userRole === 'CUSTOMER' ? [MessageType.INTERNAL_NOTE] : [] ;
+        return await this._ticketMessageRepositoryContainer.getAllTicketMessage(ticketId, excludeTupes);
     }
 
 

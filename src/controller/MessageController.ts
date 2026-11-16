@@ -22,4 +22,5 @@ export class MessageController {
             return next(err);
         }
     }   
+
 }

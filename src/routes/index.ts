@@ -4,6 +4,7 @@ import { ticketCategoryRoutes } from './TicketCategory-routes.js';
 import { ticketRoutes } from './Ticket-routes.js';
 import { auditLogRoutes } from './AuditLog-routes.js';
 import { authRoutes } from './auth-routes.js';
+import { routesMessages } from './message-routes.js';
 
 const routes = Router();
 
@@ -14,6 +15,7 @@ routesAll.use(userRoute);
 routesAll.use(ticketCategoryRoutes);
 routesAll.use(ticketRoutes);
 routesAll.use(auditLogRoutes);
-routesAll.use(authRoutes)
+routesAll.use(authRoutes);
+routesAll.use(routesMessages);
 
 export default routesAll;
