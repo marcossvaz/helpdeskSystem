@@ -136,7 +136,7 @@ model Ticket {
 model TicketMessage {
   id             String         @id @default(uuid())
   ticketId       String
-  authorId       String? // null = mensagem do sistema
+  authorId       String? // null = mensagem do sistema // authorId = senderId
   type           MessageType
   content        String
   deliveryStatus DeliveryStatus @default(SENT)

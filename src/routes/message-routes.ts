@@ -6,3 +6,4 @@ export const routesMessages = Router();
 
 
 routesMessages.get('/messages/:ticketId/:userId', routesMessage.getMessage);
+routesMessages.post('/messages/send/:ticketId', routesMessage.sendMessage);

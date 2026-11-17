@@ -5,7 +5,7 @@ export const ROLE  = [
     "CUSTOMER"
 ] as const
 
-type Role = (typeof ROLE[number])
+export type Role = (typeof ROLE[number])
 
 export interface User {
     name: string;
