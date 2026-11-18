@@ -50,6 +50,13 @@ export class TicketRepository {
         })
     }
 
+    async updateResponse(ticketId:string) {
+        return await prisma.ticket.update({
+            where: {id: ticketId},
+            data: {firstResponseAt: new Date()}
+        })
+    }
+
     async findTicketByNumber(ticketnumber: string) {
         return await prisma.ticket.findUnique({
             where: {

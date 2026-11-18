@@ -1,6 +1,8 @@
 import { logger } from "../config/logger.js";
+import { getIo } from "../config/socket.js";
 import { MessageType, type Role } from "../generated/prisma/enums.js";
 import type { Message } from "../model/Message.js";
+import type { NotificationRepository } from "../repository/NotificationRepository.js";
 import type { TicketMessageRepository } from "../repository/TicketMessageRepository.js";
 import type { TicketRepository } from "../repository/TicketRepository.js";
 import { AppError } from "../utils/AppError.js";
@@ -9,7 +11,8 @@ export class MessageService {
 
     constructor(
         private readonly _ticketRepositoryContainer: TicketRepository,
-        private readonly _ticketMessageRepositoryContainer: TicketMessageRepository
+        private readonly _ticketMessageRepositoryContainer: TicketMessageRepository,
+        private readonly _notificationRepositoryContainer: NotificationRepository
     ) { }
 
     async getMessage(ticketId: string, userId: string, userRole: Role) {
@@ -47,16 +50,43 @@ export class MessageService {
 
         const messageType = senderRole === 'CUSTOMER' ? 'CUSTOMER_MESSAGE' : 'AGENT_MESSAGE';
 
-        const result = await this._ticketMessageRepositoryContainer.create(
+        const message = await this._ticketMessageRepositoryContainer.create(
             ticketId,
             {
                 authorId,
                 content: data.content,
-                type:messageType,
+                type: messageType,
                 role: data.role
             });
-        logger.info({ticketId, senderRole, type: messageType});
 
-        return result;
+        // set FirstResponse if agent's first reply
+        if (senderRole !== 'CUSTOMER' && !ticket.firstResponseAt) {
+            await this._ticketRepositoryContainer.updateResponse(ticketId);
+        }
+
+        logger.info({ ticketId, senderRole, type: messageType });
+
+        const notifyUserId = senderRole === 'CUSTOMER' ? ticket.AssisgnedAgentId : ticket.customerId;
+        const notification = notifyUserId
+            ? await this._notificationRepositoryContainer.create({
+                userId: notifyUserId,
+                title: "New message",
+                message: `New message in ticket ${ticket.ticketnumber}`,
+                type: "NEW_MESSAGE",
+                metadata: { ticketId, ticketNumber: ticket.ticketnumber }
+            })
+            : null;
+
+        try {
+            const io = getIo();
+            io.to(`ticket:${ticketId}`).emit('new_message', { ticketId, message });
+            if (notifyUserId && notification) {
+                io.to(`user:${notifyUserId}`).emit(`Notification_received`, notification);
+            }
+        } catch (error) {
+            logger.error({error, ticketId}, 'Falha ao mandar evento de socket')
+        }
+
+        return message;
     }
 }
