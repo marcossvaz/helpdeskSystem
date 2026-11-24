@@ -1,3 +1,12 @@
+export const AGENTSTATUSROLE = [
+    "AVAILABLE",
+    "BUSY",
+    "OFFLINE"
+] as const
+
+export type AgentStatus = (typeof AGENTSTATUSROLE[number]);
+
+// ----------------------------------
 export const ROLE  = [
     "AGENT",
     "TEAM_LEAD",
@@ -6,7 +15,7 @@ export const ROLE  = [
 ] as const
 
 export type Role = (typeof ROLE[number])
-
+// -----------------------------------
 export interface User {
     name: string;
     email: string;

@@ -1,4 +1,4 @@
-import type { MessageType } from "../generated/prisma/enums.js";
+import { DeliveryStatus, type MessageType } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/prisma.js";
 import type { Message } from "../model/Message.js";
 
@@ -23,5 +23,18 @@ export class TicketMessageRepository {
             }
         })
     }
+
+    async findByTicketId(ticketId: string) {
+        return await prisma.ticketMessage.findFirst({
+            where: {id: ticketId},
+            include: {ticket: true}
+        })
+    }
     
+    async status(ticketId: string) {
+        return await prisma.ticketMessage.update({
+            where: {id: ticketId},
+            data: { deliveryStatus: 'SEEN'}
+        })
+    }
 }

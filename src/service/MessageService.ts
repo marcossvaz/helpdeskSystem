@@ -32,7 +32,7 @@ export class MessageService {
         return await this._ticketMessageRepositoryContainer.getAllTicketMessage(ticketId, excludeTupes);
     }
 
-    async sendMessage(ticketId: string, authorId: string, senderRole: Role, data: Message) {
+    async sendMessage(ticketId: string, authorId: string, senderRole: Role, data: Pick<Message, 'content'>) {
         const ticket = await this._ticketRepositoryContainer.findById(ticketId);
         if (!ticket) throw new AppError("ago de errado/ticket não existe", 404);
 
@@ -56,7 +56,7 @@ export class MessageService {
                 authorId,
                 content: data.content,
                 type: messageType,
-                role: data.role
+                role: senderRole
             });
 
         // set FirstResponse if agent's first reply
@@ -88,5 +88,13 @@ export class MessageService {
         }
 
         return message;
+    }
+
+    async findByTicketId(ticketid: string) {
+        return await this._ticketMessageRepositoryContainer.findByTicketId(ticketid);
+    }
+
+    async status(ticketId: string) {
+        return await this._ticketMessageRepositoryContainer.status(ticketId);
     }
 }

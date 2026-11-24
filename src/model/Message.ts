@@ -14,5 +14,5 @@ export interface Message {
     content: string;
     type: MessageType;
     authorId: string;
-    role: Role
+    role: Role;
 }

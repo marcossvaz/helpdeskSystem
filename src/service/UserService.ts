@@ -1,4 +1,5 @@
 import type { IUserCreateSchema } from "../controller/schemas/UserSchema.js";
+import type { AgentStatus } from "../model/User.js";
 import type { UserRepository } from "../repository/UserRepository.js";
 import { AppError } from "../utils/AppError.js";
 import { generateHash } from "../utils/hash.js";
@@ -31,5 +32,9 @@ export class UserService {
         if(!findUser) throw new AppError("Algo de errado com usuário", 404);
 
         return await this._userRepository.findById(id);
+    }
+
+    async updateAgentStatus(userId: string, status: AgentStatus) {
+        return await this._userRepository.updateAgentStatus(userId, status);
     }
 }

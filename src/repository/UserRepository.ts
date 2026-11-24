@@ -1,3 +1,4 @@
+import type { AgentStatus } from "../generated/prisma/enums.js";
 import { prisma } from "../lib/prisma.js";
 import type { User } from "../model/User.js";
 
@@ -27,6 +28,15 @@ export class UserRepository{
             where: {
                 id
             }, include: {assignedTickets: true}
+        })
+    }
+
+    async updateAgentStatus(userId:string, status: AgentStatus) {
+        return await prisma.user.update({
+            where: {id: userId},
+            data: {
+                agentStatus: status
+            }
         })
     }
 }
