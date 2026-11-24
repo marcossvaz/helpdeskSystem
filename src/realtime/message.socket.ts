@@ -27,7 +27,7 @@ export function registerMessageHandlers(socket: AppSocket, messageService: Messa
         });
     });
 
-
+    // message seen
     socket.on("message_seen", async (data: {ticketId: string; messageId: string}) => {
         try {
             const message = await messageService.findByTicketId(data.ticketId);

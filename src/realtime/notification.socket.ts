@@ -6,7 +6,7 @@ import type { AppSocket } from "../types/socket.js";
 
 type Ack = (result: { ok: boolean; error?: string }) => void;
 
-// ttpe
+// types ------------------
 const AGENT_STATUSES = ["AVAILABLE", "BUSY", "OFFLINE"] as const;
 const statusSchema = z.object({ status: z.enum(AGENT_STATUSES) });
 
@@ -33,9 +33,10 @@ export function registerAgentHandlers(socket: AppSocket, userService: UserServic
 
             socket.to("staff").emit("agent_status_changed", { userId, agentStatus: status });
 
+            logger.info({agentId: socket.data.user.id, status: data })
             ack?.({ ok: true });
         } catch (err) {
-            logger.error({ err }, "Error updating agent status");
+            logger.error({ err }, "Erro ao atuzalir o status do agente");
             ack?.({ ok: false, error: "Não foi possível atualizar o status" });
         }
     });
