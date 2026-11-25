@@ -10,7 +10,7 @@ type Ack = (result: { ok: boolean; error?: string }) => void;
 const AGENT_STATUSES = ["AVAILABLE", "BUSY", "OFFLINE"] as const;
 const statusSchema = z.object({ status: z.enum(AGENT_STATUSES) });
 
-export function registerAgentHandlers(socket: AppSocket, userService: UserService) {
+export function registerNotificationHandlers(socket: AppSocket, userService: UserService) {
     socket.on("update_agent_status", async (data: unknown, ack?: Ack) => {
         try {
             const { id: userId, role } = socket.data.user;
