@@ -11,6 +11,9 @@ export const notificationSchema = z.object({
 })
 
 
+export const userIdNotificationSchema = z.object({
+    userId: z.string().min(2, "Id é necessário")
+})
 
 // ======= TYPES =:
 

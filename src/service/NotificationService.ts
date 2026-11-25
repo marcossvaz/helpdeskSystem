@@ -8,4 +8,8 @@ export class NotificationService {
     async create(data: INotificationSchema) {
         return await this._notificationRepository.create(data);
     }
+
+    async getUserNotifications(userId:string) {
+        return await this._notificationRepository.getUserNotifications(userId);
+    }
 }
