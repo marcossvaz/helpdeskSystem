@@ -20,4 +20,18 @@ export class NotificationRepository {
             orderBy: { createdAt: 'desc' }
         })
     }
+
+    async getNotificationById(id: string) {
+        return await prisma.notification.findFirst({
+            where: { id }
+        })
+    }
+
+    async markAsRead(notificationId: string) {
+        return await prisma.notification.update({
+            where: { id: notificationId },
+            data: { isRead: true }
+        })
+    }
+ 
 }

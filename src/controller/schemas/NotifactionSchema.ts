@@ -15,6 +15,11 @@ export const userIdNotificationSchema = z.object({
     userId: z.string().min(2, "Id é necessário")
 })
 
+export const markAsReadSchema = z.object({
+    notificationId: z.string().min(2, "notification deve ser passada"),
+    userId: z.string().min(2, "Id é necessário")
+})
+
 // ======= TYPES =:
 
 export type INotificationSchema = z.infer<typeof notificationSchema>;
