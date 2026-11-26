@@ -3,13 +3,13 @@ import type { NotificationRepository } from "../repository/NotificationRepositor
 
 export class NotificationService {
 
-    constructor(private readonly _notificationRepository: NotificationRepository) {}
+    constructor(private readonly _notificationRepository: NotificationRepository) { }
 
     async create(data: INotificationSchema) {
         return await this._notificationRepository.create(data);
     }
 
-    async getUserNotifications(userId:string) {
+    async getUserNotifications(userId: string) {
         return await this._notificationRepository.getUserNotifications(userId);
     }
 }

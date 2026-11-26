@@ -4,6 +4,8 @@ import { notificationServiceRepositry } from "../container/NotificationServiceFa
 import { AppError } from "../utils/AppError.js";
 
 export class NotificationController {
+
+    // create routes
     getUserNotifications = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { userId } = await userIdNotificationSchema.parse(req.params);

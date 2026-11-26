@@ -16,8 +16,8 @@ export class NotificationRepository {
 
     async getUserNotifications(userId: string) {
         return await prisma.notification.findFirst({
-            where: {userId},
-            orderBy: {createdAt: 'desc'}
+            where: { userId },
+            orderBy: { createdAt: 'desc' }
         })
     }
 }

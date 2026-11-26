@@ -5,6 +5,7 @@ import { ticketRoutes } from './Ticket-routes.js';
 import { auditLogRoutes } from './AuditLog-routes.js';
 import { authRoutes } from './auth-routes.js';
 import { routesMessages } from './message-routes.js';
+import { notificationRoutes } from './notification-routes.js';
 
 const routes = Router();
 
@@ -17,5 +18,6 @@ routesAll.use(ticketRoutes);
 routesAll.use(auditLogRoutes);
 routesAll.use(authRoutes);
 routesAll.use(routesMessages);
+routesAll.use(notificationRoutes)
 
 export default routesAll;
